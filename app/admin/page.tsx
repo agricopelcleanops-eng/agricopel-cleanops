@@ -1,61 +1,63 @@
 'use client'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@/hooks/useAuth'
+import Link from 'next/link'
 
-export default function AdminPage() {
-  const { profile, loading, signOut } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!loading && (!profile || profile.perfil !== 'admin')) {
-      router.push('/')
-    }
-  }, [profile, loading, router])
-
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-gray-500">Carregando...</div>
-    </div>
-  )
-
+export default function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-gray-900 text-white px-6 py-4 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-sm">AG</div>
-          <span className="font-bold">Agricopel · Gestão de Limpeza</span>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-400">Olá, {profile?.nome}</span>
-          <button onClick={signOut} className="text-sm text-gray-400 hover:text-white transition-colors">Sair</button>
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      {/* Header com Navegação Integrada */}
+      <header className="bg-slate-900 text-white p-4 shadow-lg">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-8">
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <span className="bg-orange-500 text-white px-2 py-0.5 rounded text-sm font-black">AG</span>
+              Agricopel · Gestão de Limpeza
+            </h1>
+            <nav className="hidden md:flex gap-6">
+              <Link href="/admin" className="text-orange-500 font-bold border-b-2 border-orange-500 pb-1">Dashboard</Link>
+              <Link href="/admin/usuarios" className="text-slate-400 hover:text-white transition-colors pb-1">Gestão de Equipe</Link>
+            </nav>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-slate-400 text-sm hidden sm:inline">Olá, Administrador</span>
+            <button onClick={() => window.location.href = '/'} className="bg-slate-800 hover:bg-slate-700 px-4 py-1.5 rounded-md text-sm transition-all font-medium">Sair</button>
+          </div>
         </div>
       </header>
-      <main className="max-w-6xl mx-auto p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 text-sm">Visão geral do sistema de limpeza</p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: 'Chamados hoje', valor: '0', cor: 'text-blue-600' },
-            { label: 'Em aberto', valor: '0', cor: 'text-orange-500' },
-            { label: 'Concluídos', valor: '0', cor: 'text-green-600' },
-            { label: 'SLA médio', valor: '—', cor: 'text-purple-600' },
-          ].map((item) => (
-            <div key={item.label} className="bg-white rounded-2xl border border-gray-200 p-5">
-              <div className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">{item.label}</div>
-              <div className={`text-3xl font-bold ${item.cor}`}>{item.valor}</div>
-            </div>
-          ))}
-        </div>
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
-          <h2 className="font-bold text-gray-900 mb-4">Chamados recentes</h2>
-          <div className="text-center py-12 text-gray-400">
-            <div className="text-4xl mb-3">📋</div>
-            <p>Nenhum chamado ainda.</p>
-            <p className="text-sm mt-1">Os chamados aparecerão aqui assim que forem abertos.</p>
+
+      {/* Conteúdo Principal */}
+      <main className="max-w-7xl mx-auto p-6 md:p-10">
+        <div className="mb-10 flex justify-between items-end">
+          <div>
+            <h2 className="text-3xl font-bold">Dashboard</h2>
+            <p className="text-slate-500">Visão geral do sistema de limpeza na unidade CSC</p>
           </div>
+        </div>
+
+        {/* Cards de Estatísticas Reais */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2">Chamados Hoje</p>
+            <p className="text-4xl font-extrabold text-blue-600">0</p>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2">Em Aberto</p>
+            <p className="text-4xl font-extrabold text-orange-500">0</p>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2">Concluídos</p>
+            <p className="text-4xl font-extrabold text-green-600">0</p>
+          </div>
+          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+            <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-2">SLA Médio</p>
+            <p className="text-4xl font-extrabold text-slate-300">—</p>
+          </div>
+        </div>
+
+        {/* Lista de Chamados Recentes */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-16 text-center">
+            <div className="text-6xl mb-6">📋</div>
+            <h3 className="text-xl font-bold text-slate-800">Nenhum chamado ainda.</h3>
+            <p className="text-slate-500 max-w-sm mx-auto">Os chamados aparecerão aqui assim que forem abertos pelos usuários ou solicitantes.</p>
         </div>
       </main>
     </div>
