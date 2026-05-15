@@ -14,7 +14,7 @@ export default function AdminDashboard() {
             </h1>
             <nav className="hidden md:flex gap-6">
               <Link href="/admin" className="text-orange-500 font-bold border-b-2 border-orange-500 pb-1">Dashboard</Link>
-              <Link href="/admin/usuarios" className="text-slate-400 hover:text-white transition-colors pb-1">Gestão de Equipe</Link>
+              <Link href="/admin/equipe" className="text-slate-400 hover:text-white transition-colors pb-1">Gestão de Equipe</Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">
