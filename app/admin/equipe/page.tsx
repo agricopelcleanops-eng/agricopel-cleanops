@@ -47,18 +47,15 @@ export default function EquipePage() {
     setSalvando(true)
     setErro('')
     setSucesso('')
-    const loginLimpo = novoLogin.toLowerCase().trim().replace(/\s+/g, '')
-    const email = `${loginLimpo}@agricopel.app`
     try {
-      const { data: authData, error: authError } = await supabase.auth.admin.createUser({
-        email, password: novaSenha, email_confirm: true
+      const res = await fetch('/api/criar-usuario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome: novoNome, login: novoLogin, senha: novaSenha, perfil: novoPerfil })
       })
-      if (authError) throw new Error(authError.message)
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: authData.user.id, nome: novoNome, email, login: loginLimpo, perfil: novoPerfil, ativo: true
-      })
-      if (profileError) throw new Error(profileError.message)
-      setSucesso(`Usuário "${novoLogin}" criado! Login: ${loginLimpo}`)
+      const result = await res.json()
+      if (!res.ok) throw new Error(result.error || 'Erro ao criar usuário')
+      setSucesso(`Usuário "${novoLogin}" criado com sucesso!`)
       setNovoNome(''); setNovoLogin(''); setNovaSenha(''); setNovoPerfil('asg')
       setMostrarForm(false)
       carregarEquipe()
